@@ -12,7 +12,7 @@ import (
 	"os"
 	"reflect"
 
-	"github.com/rogpeppe/godef/go/token"
+	"github.com/bobg/godef/go/token"
 )
 
 // A FieldFilter may be provided to Fprint to control the output.
@@ -36,7 +36,6 @@ func NotNilFilter(_ string, v reflect.Value) bool {
 // A non-nil FieldFilter f may be provided to control the output:
 // struct fields for which f(fieldname, fieldvalue) is true are
 // are printed; all others are filtered from the output.
-//
 func Fprint(w io.Writer, fset *token.FileSet, x interface{}, f FieldFilter) (n int, err error) {
 	// setup printer
 	p := printer{

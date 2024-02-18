@@ -14,17 +14,16 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/rogpeppe/godef/go/ast"
-	"github.com/rogpeppe/godef/go/parser"
-	"github.com/rogpeppe/godef/go/printer"
-	"github.com/rogpeppe/godef/go/scanner"
-	"github.com/rogpeppe/godef/go/token"
+	"github.com/bobg/godef/go/ast"
+	"github.com/bobg/godef/go/parser"
+	"github.com/bobg/godef/go/printer"
+	"github.com/bobg/godef/go/scanner"
+	"github.com/bobg/godef/go/token"
 )
 
 // Type represents the type of a Go expression.
 // It can represent a Go package and a Go type as well as the
 // usual expression types.
-//
 type Type struct {
 	// Parse-tree representation of the expression's type.
 	Node ast.Node
@@ -129,7 +128,6 @@ func DefaultImportPathToName(path, srcDir string) (string, error) {
 // possible candidate for parsing as part of a package.
 // Including _test.go here isn't quite right, but what
 // else can we do?
-//
 func isGoFile(d os.FileInfo) bool {
 	return strings.HasSuffix(d.Name(), ".go") &&
 		!strings.HasSuffix(d.Name(), "_test.go") &&
@@ -182,7 +180,6 @@ func (t Type) Member(name string) *ast.Object {
 // all the members of the type, then closes it.
 // Members at a shallower depth will be
 // sent first.
-//
 func (t Type) Iter() <-chan *ast.Object {
 	// TODO avoid sending members with the same name twice.
 	c := make(chan *ast.Object)
@@ -204,7 +201,6 @@ func (t Type) Iter() <-chan *ast.Object {
 // interface members, and types have objects.
 // The returned object can be used with DeclPos to find out
 // the source location of the definition of the object.
-//
 func ExprType(e ast.Expr, importer Importer, fs *token.FileSet) (obj *ast.Object, typ Type) {
 	ctxt := &exprTypeContext{
 		importer: importer,
@@ -628,7 +624,6 @@ func (ctxt *exprTypeContext) doStructMembers(fields []*ast.Field, pkg string, fn
 
 // unnamedFieldName returns the field name for
 // an unnamed field with its type given by ast node t.
-//
 func unnamedFieldName(t ast.Node) *ast.Ident {
 	switch t := t.(type) {
 	case *ast.Ident:
@@ -739,7 +734,6 @@ func (e *exprIndex) End() token.Pos {
 //
 // If id is non-nil, it gives the referring identifier. This is only used
 // to determine which node in a type switch is being referred to.
-//
 func splitDecl(obj *ast.Object, id *ast.Ident) (expr, typ ast.Node) {
 	switch decl := obj.Decl.(type) {
 	case nil:

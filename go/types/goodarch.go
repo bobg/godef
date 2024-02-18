@@ -16,10 +16,9 @@ const goarchList = "386 amd64 arm "
 // suffix which does not match the current system.
 // The recognized filename formats are:
 //
-//     name_$(GOOS).*
-//     name_$(GOARCH).*
-//     name_$(GOOS)_$(GOARCH).*
-//
+//	name_$(GOOS).*
+//	name_$(GOARCH).*
+//	name_$(GOOS)_$(GOARCH).*
 func goodOSArch(filename string) (ok bool) {
 	if dot := strings.Index(filename, "."); dot != -1 {
 		filename = filename[:dot]

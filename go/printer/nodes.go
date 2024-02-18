@@ -11,8 +11,8 @@ package printer
 import (
 	"bytes"
 
-	"github.com/rogpeppe/godef/go/ast"
-	"github.com/rogpeppe/godef/go/token"
+	"github.com/bobg/godef/go/ast"
+	"github.com/bobg/godef/go/token"
 )
 
 // Other formatting issues:
@@ -32,13 +32,13 @@ import (
 // line break was printed; returns false otherwise.
 //
 // TODO(gri): linebreak may add too many lines if the next statement at "line"
-//            is preceded by comments because the computation of n assumes
-//            the current position before the comment and the target position
-//            after the comment. Thus, after interspersing such comments, the
-//            space taken up by them is not considered to reduce the number of
-//            linebreaks. At the moment there is no easy way to know about
-//            future (not yet interspersed) comments in this function.
 //
+//	is preceded by comments because the computation of n assumes
+//	the current position before the comment and the target position
+//	after the comment. Thus, after interspersing such comments, the
+//	space taken up by them is not considered to reduce the number of
+//	linebreaks. At the moment there is no easy way to know about
+//	future (not yet interspersed) comments in this function.
 func (p *printer) linebreak(line, min int, ws whiteSpace, newSection bool) (printedBreak bool) {
 	n := p.nlines(line-p.pos.Line, min)
 	if n > 0 {
@@ -109,8 +109,9 @@ func (p *printer) identList(list []*ast.Ident, indent bool, multiLine *bool) {
 // lines.
 //
 // TODO(gri) Consider rewriting this to be independent of []ast.Expr
-//           so that we can use the algorithm for any kind of list
-//           (e.g., pass list via a channel over which to range).
+//
+//	so that we can use the algorithm for any kind of list
+//	(e.g., pass list via a channel over which to range).
 func (p *printer) exprList(prev0 token.Pos, list []ast.Expr, depth int, mode exprListMode, multiLine *bool, next0 token.Pos) {
 	if len(list) == 0 {
 		return
@@ -555,6 +556,7 @@ func reduceDepth(depth int) int {
 // (Algorithm suggestion by Russ Cox.)
 //
 // The precedences are:
+//
 //	5             *  /  %  <<  >>  &  &^
 //	4             +  -  |  ^
 //	3             ==  !=  <  <=  >  >=
@@ -567,24 +569,24 @@ func reduceDepth(depth int) int {
 // To choose the cutoff, look at the whole expression but excluding primary
 // expressions (function calls, parenthesized exprs), and apply these rules:
 //
-//	1) If there is a binary operator with a right side unary operand
-//	   that would clash without a space, the cutoff must be (in order):
+//  1. If there is a binary operator with a right side unary operand
+//     that would clash without a space, the cutoff must be (in order):
 //
-//		/*	6
-//		&&	6
-//		&^	6
-//		++	5
-//		--	5
+//     /*	6
+//     &&	6
+//     &^	6
+//     ++	5
+//     --	5
 //
-//         (Comparison operators always have spaces around them.)
+//     (Comparison operators always have spaces around them.)
 //
-//	2) If there is a mix of level 5 and level 4 operators, then the cutoff
-//	   is 5 (use spaces to distinguish precedence) in Normal mode
-//	   and 4 (never use spaces) in Compact mode.
+//  2. If there is a mix of level 5 and level 4 operators, then the cutoff
+//     is 5 (use spaces to distinguish precedence) in Normal mode
+//     and 4 (never use spaces) in Compact mode.
 //
-//	3) If there are no level 4 operators or no level 5 operators, then the
-//	   cutoff is 6 (always use spaces) in Normal mode
-//	   and 4 (never use spaces) in Compact mode.
+//  3. If there are no level 4 operators or no level 5 operators, then the
+//     cutoff is 6 (always use spaces) in Normal mode
+//     and 4 (never use spaces) in Compact mode.
 //
 // Sets multiLine to true if the binary expression spans multiple lines.
 func (p *printer) binaryExpr(x *ast.BinaryExpr, prec1, cutoff, depth int, multiLine *bool) {
@@ -1175,24 +1177,23 @@ func (p *printer) stmt(stmt ast.Stmt, nextIsRBrace bool, multiLine *bool) {
 //
 // For example, the declaration:
 //
-//	const (
-//		foobar int = 42 // comment
-//		x          = 7  // comment
-//		foo
-//              bar = 991
-//	)
+//		const (
+//			foobar int = 42 // comment
+//			x          = 7  // comment
+//			foo
+//	             bar = 991
+//		)
 //
 // leads to the type/values matrix below. A run of value columns (V) can
 // be moved into the type column if there is no type for any of the values
 // in that column (we only move entire columns so that they align properly).
 //
-//	matrix        formatted     result
-//                    matrix
-//	T  V    ->    T  V     ->   true      there is a T and so the type
-//	-  V          -  V          true      column must be kept
-//	-  -          -  -          false
-//	-  V          V  -          false     V is moved into T column
-//
+//		matrix        formatted     result
+//	                   matrix
+//		T  V    ->    T  V     ->   true      there is a T and so the type
+//		-  V          -  V          true      column must be kept
+//		-  -          -  -          false
+//		-  V          V  -          false     V is moved into T column
 func keepTypeColumn(specs []ast.Spec) []bool {
 	m := make([]bool, len(specs))
 
@@ -1261,7 +1262,6 @@ func (p *printer) valueSpec(s *ast.ValueSpec, keepType, doIndent bool, multiLine
 // multi-line identifier lists in the spec are indented when the first
 // linebreak is encountered.
 // Sets multiLine to true if the spec spans multiple lines.
-//
 func (p *printer) spec(spec ast.Spec, n int, doIndent bool, multiLine *bool) {
 	switch s := spec.(type) {
 	case *ast.ImportSpec:
@@ -1352,7 +1352,6 @@ func (p *printer) genDecl(d *ast.GenDecl, multiLine *bool) {
 // The result is <= maxSize if the node fits on one line with at
 // most maxSize chars and the formatted output doesn't contain
 // any control chars. Otherwise, the result is > maxSize.
-//
 func (p *printer) nodeSize(n ast.Node, maxSize int) (size int) {
 	// nodeSize invokes the printer, which may invoke nodeSize
 	// recursively. For deep composite literal nests, this can

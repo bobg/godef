@@ -20,11 +20,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/rogpeppe/godef/go/ast"
-	"github.com/rogpeppe/godef/go/parser"
-	"github.com/rogpeppe/godef/go/token"
-	"github.com/rogpeppe/godef/go/types"
 	"golang.org/x/tools/go/packages"
+
+	"github.com/bobg/godef/go/ast"
+	"github.com/bobg/godef/go/parser"
+	"github.com/bobg/godef/go/token"
+	"github.com/bobg/godef/go/types"
 )
 
 var readStdin = flag.Bool("i", false, "read file from stdin")
@@ -230,7 +231,6 @@ type nodeResult struct {
 //
 // As a special case, if it finds an import
 // spec, it returns ImportSpec.
-//
 func findIdentifier(f *ast.File, searchpos int) (ast.Node, error) {
 	ec := make(chan nodeResult)
 	found := func(startPos, endPos token.Pos) bool {
@@ -425,7 +425,6 @@ var errNoPkgFiles = errors.New("no more package files found")
 // current directory that implement the same package name
 // the principal source file, except the original source file
 // itself, which will already have been parsed.
-//
 func parseLocalPackage(filename string, src *ast.File, pkgScope *ast.Scope, pathToName parser.ImportPathToName) (*ast.Package, error) {
 	pkg := &ast.Package{src.Name.Name, pkgScope, nil, map[string]*ast.File{filename: src}}
 	d, f := filepath.Split(filename)
@@ -463,7 +462,6 @@ func parseLocalPackage(filename string, src *ast.File, pkgScope *ast.Scope, path
 
 // pkgName returns the package name implemented by the
 // go source filename.
-//
 func pkgName(filename string) string {
 	prog, _ := parser.ParseFile(types.FileSet, filename, nil, parser.PackageClauseOnly, nil, types.DefaultImportPathToName)
 	if prog != nil {

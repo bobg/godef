@@ -47,7 +47,6 @@ func walkDeclList(v Visitor, list []Decl) {
 // v.Visit(node) is not nil, Walk is invoked recursively with visitor
 // w for each of the non-nil children of node, followed by a call of
 // w.Visit(nil).
-//
 func Walk(v Visitor, node Node) {
 	if v = v.Visit(node); v == nil {
 		return
@@ -381,7 +380,6 @@ func (f inspector) Visit(node Node) Visitor {
 // Inspect traverses an AST in depth-first order: It starts by calling
 // f(node); node must not be nil. If f returns true, Inspect invokes f
 // for all the non-nil children of node, recursively.
-//
 func Inspect(node Node, f func(Node) bool) {
 	Walk(inspector(f), node)
 }

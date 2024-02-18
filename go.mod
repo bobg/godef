@@ -1,4 +1,4 @@
-module github.com/rogpeppe/godef
+module github.com/bobg/godef
 
 go 1.13
 

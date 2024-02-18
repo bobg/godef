@@ -12,9 +12,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rogpeppe/godef/go/ast"
-	"github.com/rogpeppe/godef/go/parser"
-	"github.com/rogpeppe/godef/go/token"
+	"github.com/bobg/godef/go/ast"
+	"github.com/bobg/godef/go/parser"
+	"github.com/bobg/godef/go/token"
 )
 
 const (
@@ -163,7 +163,6 @@ func TestFiles(t *testing.T) {
 // TestLineComments, using a simple test case, checks that consequtive line
 // comments are properly terminated with a newline even if the AST position
 // information is incorrect.
-//
 func TestLineComments(t *testing.T) {
 	const src = `// comment 1
 	// comment 2

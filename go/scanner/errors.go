@@ -9,14 +9,13 @@ import (
 	"io"
 	"sort"
 
-	"github.com/rogpeppe/godef/go/token"
+	"github.com/bobg/godef/go/token"
 )
 
 // An implementation of an ErrorHandler may be provided to the Scanner.
 // If a syntax error is encountered and a handler was installed, Error
 // is called with a position and an error message. The position points
 // to the beginning of the offending token.
-//
 type ErrorHandler interface {
 	Error(pos token.Position, msg string)
 }
@@ -29,7 +28,6 @@ type ErrorHandler interface {
 // scanner in a data structure that uses the scanner. By passing a
 // reference to an ErrorVector to the scanner's Init call, default
 // error handling is obtained.
-//
 type ErrorVector struct {
 	errors []*Error
 }
@@ -43,7 +41,6 @@ func (h *ErrorVector) ErrorCount() int { return len(h.errors) }
 // Within ErrorVector, an error is represented by an Error node. The
 // position Pos, if valid, points to the beginning of the offending
 // token, and the error condition is described by Msg.
-//
 type Error struct {
 	Pos token.Position
 	Msg string
@@ -97,7 +94,6 @@ func (p ErrorList) Error() string {
 
 // These constants control the construction of the ErrorList
 // returned by GetErrors.
-//
 const (
 	Raw         = iota // leave error list unchanged
 	Sorted             // sort error list by file, line, and column number
@@ -107,7 +103,6 @@ const (
 // GetErrorList returns the list of errors collected by an ErrorVector.
 // The construction of the ErrorList returned is controlled by the mode
 // parameter. If there are no errors, the result is nil.
-//
 func (h *ErrorVector) GetErrorList(mode int) ErrorList {
 	if len(h.errors) == 0 {
 		return nil
@@ -139,7 +134,6 @@ func (h *ErrorVector) GetErrorList(mode int) ErrorList {
 // GetError is like GetErrorList, but it returns an os.Error instead
 // so that a nil result can be assigned to an os.Error variable and
 // remains nil.
-//
 func (h *ErrorVector) GetError(mode int) error {
 	if len(h.errors) == 0 {
 		return nil
@@ -156,7 +150,6 @@ func (h *ErrorVector) Error(pos token.Position, msg string) {
 // PrintError is a utility function that prints a list of errors to w,
 // one error per line, if the err parameter is an ErrorList. Otherwise
 // it prints the err string.
-//
 func PrintError(w io.Writer, err error) {
 	if list, ok := err.(ErrorList); ok {
 		for _, e := range list {

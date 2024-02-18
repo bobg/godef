@@ -6,18 +6,17 @@
 // source which can then be tokenized through repeated calls to the Scan
 // function. Typical use:
 //
-//	var s Scanner
-//	fset := token.NewFileSet()  // position information is relative to fset
-//      file := fset.AddFile(filename, fset.Base(), len(src))  // register file
-//	s.Init(file, src, nil /* no error handler */, 0)
-//	for {
-//		pos, tok, lit := s.Scan()
-//		if tok == token.EOF {
-//			break
+//		var s Scanner
+//		fset := token.NewFileSet()  // position information is relative to fset
+//	     file := fset.AddFile(filename, fset.Base(), len(src))  // register file
+//		s.Init(file, src, nil /* no error handler */, 0)
+//		for {
+//			pos, tok, lit := s.Scan()
+//			if tok == token.EOF {
+//				break
+//			}
+//			// do something here with pos, tok, and lit
 //		}
-//		// do something here with pos, tok, and lit
-//	}
-//
 package scanner
 
 import (
@@ -28,13 +27,12 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/rogpeppe/godef/go/token"
+	"github.com/bobg/godef/go/token"
 )
 
 // A Scanner holds the scanner's internal state while processing
 // a given text.  It can be allocated as part of another data
 // structure but must be initialized via Init before use.
-//
 type Scanner struct {
 	// immutable state
 	file *token.File  // source file handle
@@ -56,7 +54,6 @@ type Scanner struct {
 
 // Read the next Unicode char into S.ch.
 // S.ch < 0 means end-of-file.
-//
 func (S *Scanner) next() {
 	if S.rdOffset < len(S.src) {
 		S.offset = S.rdOffset
@@ -89,7 +86,6 @@ func (S *Scanner) next() {
 
 // The mode parameter to the Init function is a set of flags (or 0).
 // They control scanner behavior.
-//
 const (
 	ScanComments      = 1 << iota // return comments as COMMENT tokens
 	AllowIllegalChars             // do not report an error for illegal chars
@@ -110,7 +106,6 @@ const (
 //
 // Note that Init may call err if there is an error in the first character
 // of the file.
-//
 func (S *Scanner) Init(file *token.File, src []byte, err ErrorHandler, mode uint) {
 	// Explicitly initialize all fields since a scanner may be reused.
 	if file.Size() != len(src) {
@@ -511,7 +506,6 @@ func (S *Scanner) switch4(tok0, tok1 token.Token, ch2 rune, tok2, tok3 token.Tok
 // Scan adds line information to the file added to the file
 // set with Init. Token positions are relative to that file
 // and thus relative to the file set.
-//
 func (S *Scanner) Scan() (token.Pos, token.Token, string) {
 scanAgain:
 	S.skipWhitespace()

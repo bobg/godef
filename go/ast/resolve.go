@@ -10,8 +10,8 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/rogpeppe/godef/go/scanner"
-	"github.com/rogpeppe/godef/go/token"
+	"github.com/bobg/godef/go/scanner"
+	"github.com/bobg/godef/go/token"
 )
 
 type pkgBuilder struct {
@@ -71,7 +71,6 @@ type Importer func(imports map[string]*Object, path string) (pkg *Object, err er
 // belong to different packages, one package name is selected and files with
 // different package names are reported and then ignored.
 // The result is a package node and a scanner.ErrorList if there were errors.
-//
 func NewPackage(fset *token.FileSet, files map[string]*File, importer Importer, universe *Scope) (*Package, error) {
 	var p pkgBuilder
 	p.fset = fset

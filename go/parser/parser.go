@@ -6,7 +6,6 @@
 // forms (see the various Parse* functions); the output is an abstract
 // syntax tree (AST) representing the Go source. The parser is invoked
 // through one of the Parse* functions.
-//
 package parser
 
 import (
@@ -15,15 +14,14 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/rogpeppe/godef/go/ast"
-	"github.com/rogpeppe/godef/go/scanner"
-	"github.com/rogpeppe/godef/go/token"
+	"github.com/bobg/godef/go/ast"
+	"github.com/bobg/godef/go/scanner"
+	"github.com/bobg/godef/go/token"
 )
 
 // The mode parameter to the Parse* functions is a set of flags (or 0).
 // They control the amount of source code parsed and other optional
 // parser functionality.
-//
 const (
 	PackageClauseOnly uint = 1 << iota // parsing stops after package clause
 	ImportsOnly                        // parsing stops after import declarations
@@ -366,7 +364,6 @@ func (p *parser) consumeComment() (comment *ast.Comment, endline int) {
 // comments list, and return it together with the line at which
 // the last comment in the group ends. An empty line or non-comment
 // token terminates a comment group.
-//
 func (p *parser) consumeCommentGroup() (comments *ast.CommentGroup, endline int) {
 	var list []*ast.Comment
 	endline = p.file.Line(p.pos)
@@ -397,7 +394,6 @@ func (p *parser) consumeCommentGroup() (comments *ast.CommentGroup, endline int)
 //
 // Lead and line comments may be considered documentation that is
 // stored in the AST.
-//
 func (p *parser) next() {
 	p.leadComment = nil
 	p.lineComment = nil
@@ -654,7 +650,6 @@ func (p *parser) parseFieldDecl() *ast.Field {
 // The object for the identifier in an anonymous
 // field must point to the original type because
 // the object has its own identity as a field member.
-//
 func makeAnonField(t, declType ast.Expr) ast.Expr {
 	switch t := t.(type) {
 	case *ast.Ident:
@@ -1033,7 +1028,6 @@ func (p *parser) parseFuncTypeOrLit() ast.Expr {
 
 // parseOperand may return an expression or a raw type (incl. array
 // types of the form [...]T. Callers must verify the result.
-//
 func (p *parser) parseOperand() ast.Expr {
 	if p.trace {
 		defer un(trace(p, "Operand"))
@@ -1292,7 +1286,6 @@ func unparen(x ast.Expr) ast.Expr {
 
 // checkExprOrType checks that x is an expression or a type
 // (and not a raw type such as [...]T).
-//
 func (p *parser) checkExprOrType(x ast.Expr) ast.Expr {
 	switch t := unparen(x).(type) {
 	case *ast.ParenExpr:
@@ -1398,7 +1391,8 @@ func (p *parser) parseBinaryExpr(prec1 int) ast.Expr {
 }
 
 // TODO(gri): parseExpr may return a type or even a raw type ([..]int) -
-//            should reject when a type/raw type is obviously not allowed
+//
+//	should reject when a type/raw type is obviously not allowed
 func (p *parser) parseExpr() ast.Expr {
 	if p.trace {
 		defer un(trace(p, "Expression"))

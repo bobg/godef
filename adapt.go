@@ -9,6 +9,8 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
+	gotoken "go/token"
+	gotypes "go/types"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -17,12 +19,11 @@ import (
 	"strconv"
 	"strings"
 
-	rpast "github.com/rogpeppe/godef/go/ast"
-	rpprinter "github.com/rogpeppe/godef/go/printer"
-	rptypes "github.com/rogpeppe/godef/go/types"
-	gotoken "go/token"
-	gotypes "go/types"
 	"golang.org/x/tools/go/packages"
+
+	rpast "github.com/bobg/godef/go/ast"
+	rpprinter "github.com/bobg/godef/go/printer"
+	rptypes "github.com/bobg/godef/go/types"
 )
 
 var forcePackages triBool

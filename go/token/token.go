@@ -5,7 +5,6 @@
 // This package defines constants representing the lexical
 // tokens of the Go programming language and basic operations
 // on tokens (printing, predicates).
-//
 package token
 
 import "strconv"
@@ -229,7 +228,6 @@ var tokens = [...]string{
 // token character sequence (e.g., for the token ADD, the string is
 // "+"). For all other tokens the string corresponds to the token
 // constant name (e.g. for the token IDENT, the string is "IDENT").
-//
 func (tok Token) String() string {
 	s := ""
 	if 0 <= tok && tok < Token(len(tokens)) {
@@ -246,7 +244,6 @@ func (tok Token) String() string {
 // starting with precedence 1 up to unary operators. The highest
 // precedence corresponds serves as "catch-all" precedence for
 // selector, indexing, and other operator and delimiter tokens.
-//
 const (
 	LowestPrec  = 0 // non-operators
 	UnaryPrec   = 6
@@ -256,7 +253,6 @@ const (
 // Precedence returns the operator precedence of the binary
 // operator op. If op is not a binary operator, the result
 // is LowestPrecedence.
-//
 func (op Token) Precedence() int {
 	switch op {
 	case LOR:
@@ -283,7 +279,6 @@ func init() {
 }
 
 // Lookup maps an identifier to its keyword token or IDENT (if not a keyword).
-//
 func Lookup(ident []byte) Token {
 	// TODO Maps with []byte key are illegal because []byte does not
 	//      support == . Should find a more efficient solution eventually.
@@ -297,15 +292,12 @@ func Lookup(ident []byte) Token {
 
 // IsLiteral returns true for tokens corresponding to identifiers
 // and basic type literals; returns false otherwise.
-//
 func (tok Token) IsLiteral() bool { return literal_beg < tok && tok < literal_end }
 
 // IsOperator returns true for tokens corresponding to operators and
 // delimiters; returns false otherwise.
-//
 func (tok Token) IsOperator() bool { return operator_beg < tok && tok < operator_end }
 
 // IsKeyword returns true for tokens corresponding to keywords;
 // returns false otherwise.
-//
 func (tok Token) IsKeyword() bool { return keyword_beg < tok && tok < keyword_end }

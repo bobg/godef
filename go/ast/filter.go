@@ -4,7 +4,7 @@
 
 package ast
 
-import "github.com/rogpeppe/godef/go/token"
+import "github.com/bobg/godef/go/token"
 
 // ----------------------------------------------------------------------------
 // Export filtering
@@ -23,7 +23,6 @@ func identListExports(list []*Ident) []*Ident {
 // fieldName assumes that x is the type of an anonymous field and
 // returns the corresponding field name. If x is not an acceptable
 // anonymous field, the result is nil.
-//
 func fieldName(x Expr) *Ident {
 	switch t := x.(type) {
 	case *Ident:
@@ -157,7 +156,6 @@ func declExports(decl Decl) bool {
 //
 // FileExports returns true if there is an exported declaration; it returns
 // false otherwise.
-//
 func FileExports(src *File) bool {
 	j := 0
 	for _, d := range src.Decls {
@@ -176,7 +174,6 @@ func FileExports(src *File) bool {
 //
 // PackageExports returns true if there is an exported declaration; it
 // returns false otherwise.
-//
 func PackageExports(pkg *Package) bool {
 	hasExports := false
 	for _, f := range pkg.Files {
@@ -277,7 +274,6 @@ func filterSpecList(list []Spec, f Filter) []Spec {
 //
 // FilterDecl returns true if there are any declared names left after
 // filtering; it returns false otherwise.
-//
 func FilterDecl(decl Decl, f Filter) bool {
 	switch d := decl.(type) {
 	case *GenDecl:
@@ -298,7 +294,6 @@ func FilterDecl(decl Decl, f Filter) bool {
 //
 // FilterFile returns true if there are any top-level declarations
 // left after filtering; it returns false otherwise.
-//
 func FilterFile(src *File, f Filter) bool {
 	j := 0
 	for _, d := range src.Decls {
@@ -321,7 +316,6 @@ func FilterFile(src *File, f Filter) bool {
 //
 // FilterPackage returns true if there are any top-level declarations
 // left after filtering; it returns false otherwise.
-//
 func FilterPackage(pkg *Package, f Filter) bool {
 	hasDecls := false
 	for _, src := range pkg.Files {
@@ -348,12 +342,10 @@ const (
 
 // separator is an empty //-style comment that is interspersed between
 // different comment groups when they are concatenated into a single group
-//
 var separator = &Comment{noPos, "//"}
 
 // MergePackageFiles creates a file AST by merging the ASTs of the
 // files belonging to a package. The mode flags control merging behavior.
-//
 func MergePackageFiles(pkg *Package, mode MergeMode) *File {
 	// Count the number of package docs, comments and declarations across
 	// all package files.

@@ -14,8 +14,8 @@ import (
 	"runtime"
 	"text/tabwriter"
 
-	"github.com/rogpeppe/godef/go/ast"
-	"github.com/rogpeppe/godef/go/token"
+	"github.com/bobg/godef/go/ast"
+	"github.com/bobg/godef/go/token"
 )
 
 const debug = false // enable for debugging
@@ -112,7 +112,6 @@ func (p *printer) internalError(msg ...interface{}) {
 // Escaped strings pass through tabwriter unchanged. (Note that
 // valid Go programs cannot contain tabwriter.Escape bytes since
 // they do not appear in legal UTF-8 sequences).
-//
 func (p *printer) escape(s string) string {
 	p.litbuf.Reset()
 	p.litbuf.WriteByte(tabwriter.Escape)
@@ -123,7 +122,6 @@ func (p *printer) escape(s string) string {
 
 // nlines returns the adjusted number of linebreaks given the desired number
 // of breaks n such that min <= result <= max.
-//
 func (p *printer) nlines(n, min int) int {
 	const max = 2 // max. number of newlines
 	switch {
@@ -137,7 +135,6 @@ func (p *printer) nlines(n, min int) int {
 
 // write0 writes raw (uninterpreted) data to p.output and handles errors.
 // write0 does not indent after newlines, and does not HTML-escape or update p.pos.
-//
 func (p *printer) write0(data []byte) {
 	if len(data) > 0 {
 		n, err := p.output.Write(data)
@@ -152,7 +149,6 @@ func (p *printer) write0(data []byte) {
 // write interprets data and writes it to p.output. It inserts indentation
 // after a line break unless in a tabwriter escape sequence.
 // It updates p.pos as a side-effect.
-//
 func (p *printer) write(data []byte) {
 	i0 := 0
 	for i, b := range data {
@@ -219,7 +215,6 @@ func (p *printer) writeNewlines(n int, useFF bool) {
 // (or at least very accurately estimated) position of the data in the original
 // source text. writeItem updates p.last to the position immediately following
 // the data.
-//
 func (p *printer) writeItem(pos token.Position, data string) {
 	if pos.IsValid() {
 		// continue with previous position if we don't have a valid pos
@@ -249,7 +244,6 @@ func (p *printer) writeItem(pos token.Position, data string) {
 // after all pending comments, prev is the previous comment in
 // a group of comments (or nil), and isKeyword indicates if the
 // next item is a keyword.
-//
 func (p *printer) writeCommentPrefix(pos, next token.Position, prev *ast.Comment, isKeyword bool) {
 	if p.written == 0 {
 		// the comment is the first item to be printed - don't write any whitespace
@@ -555,7 +549,6 @@ func (p *printer) writeComment(comment *ast.Comment) {
 // is needed, the kind of break (newline vs formfeed) depends on the
 // pending whitespace. writeCommentSuffix returns true if a pending
 // formfeed was dropped from the whitespace buffer.
-//
 func (p *printer) writeCommentSuffix(needsLinebreak bool) (droppedFF bool) {
 	for i, ch := range p.wsbuf {
 		switch ch {
@@ -592,7 +585,6 @@ func (p *printer) writeCommentSuffix(needsLinebreak bool) (droppedFF bool) {
 // that needs to be written before the next token). A heuristic is used to mix
 // the comments and whitespace. intersperseComments returns true if a pending
 // formfeed was dropped from the whitespace buffer.
-//
 func (p *printer) intersperseComments(next token.Position, tok token.Token) (droppedFF bool) {
 	var last *ast.Comment
 	for ; p.commentBefore(next); p.cindex++ {
@@ -704,7 +696,6 @@ func mayCombine(prev token.Token, next byte) (b bool) {
 // taking into account the amount and structure of any pending white-
 // space for best comment placement. Then, any leftover whitespace is
 // printed, followed by the actual token.
-//
 func (p *printer) print(args ...interface{}) {
 	for _, f := range args {
 		next := p.pos // estimated position of next item
@@ -785,7 +776,6 @@ func (p *printer) print(args ...interface{}) {
 
 // commentBefore returns true iff the current comment occurs
 // before the next position in the source code.
-//
 func (p *printer) commentBefore(next token.Position) bool {
 	return p.cindex < len(p.comments) && p.fset.Position(p.comments[p.cindex].List[0].Pos()).Offset < next.Offset
 }
@@ -795,7 +785,6 @@ func (p *printer) commentBefore(next token.Position) bool {
 // returns true if a pending formfeed character was dropped
 // from the whitespace buffer as a result of interspersing
 // comments.
-//
 func (p *printer) flush(next token.Position, tok token.Token) (droppedFF bool) {
 	if p.commentBefore(next) {
 		// if there are comments before the next item, intersperse them
@@ -815,7 +804,6 @@ func (p *printer) flush(next token.Position, tok token.Token) (droppedFF bool) {
 // and vtab characters into newlines and htabs (in case no tabwriter
 // is used). Text bracketed by tabwriter.Escape characters is passed
 // through unchanged.
-//
 type trimmer struct {
 	output io.Writer
 	state  int
@@ -999,14 +987,12 @@ func (cfg *Config) fprint(output io.Writer, fset *token.FileSet, node interface{
 // Position information is interpreted relative to the file set fset.
 // The node type must be *ast.File, or assignment-compatible to ast.Expr,
 // ast.Decl, ast.Spec, or ast.Stmt.
-//
 func (cfg *Config) Fprint(output io.Writer, fset *token.FileSet, node interface{}) (int, error) {
 	return cfg.fprint(output, fset, node, make(map[ast.Node]int))
 }
 
 // Fprint "pretty-prints" an AST node to output.
 // It calls Config.Fprint with default settings.
-//
 func Fprint(output io.Writer, fset *token.FileSet, node interface{}) error {
 	_, err := (&Config{Tabwidth: 8}).Fprint(output, fset, node) // don't care about number of bytes written
 	return err

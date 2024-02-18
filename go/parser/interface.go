@@ -14,9 +14,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/rogpeppe/godef/go/ast"
-	"github.com/rogpeppe/godef/go/scanner"
-	"github.com/rogpeppe/godef/go/token"
+	"github.com/bobg/godef/go/ast"
+	"github.com/bobg/godef/go/scanner"
+	"github.com/bobg/godef/go/token"
 )
 
 // ImportPathToName is the type of the function that's used
@@ -28,7 +28,6 @@ type ImportPathToName func(path string, fromDir string) (string, error)
 // If src != nil, readSource converts src to a []byte if possible;
 // otherwise it returns an error. If src == nil, readSource returns
 // the result of reading the file specified by filename.
-//
 func readSource(filename string, src interface{}) ([]byte, error) {
 	if src != nil {
 		switch s := src.(type) {
@@ -67,7 +66,6 @@ func (p *parser) parseEOF() error {
 // may be nil or contain a partial AST.
 //
 // if scope is non-nil, it will be used as the scope for the expression.
-//
 func ParseExpr(fset *token.FileSet, filename string, src interface{}, scope *ast.Scope, pathToName ImportPathToName) (ast.Expr, error) {
 	data, err := readSource(filename, src)
 	if err != nil {
@@ -89,7 +87,6 @@ func ParseExpr(fset *token.FileSet, filename string, src interface{}, scope *ast
 // list may be nil or contain partial ASTs.
 //
 // if scope is non-nil, it will be used as the scope for the statements.
-//
 func ParseStmtList(fset *token.FileSet, filename string, src interface{}, scope *ast.Scope, pathToName ImportPathToName) ([]ast.Stmt, error) {
 	data, err := readSource(filename, src)
 	if err != nil {
@@ -107,7 +104,6 @@ func ParseStmtList(fset *token.FileSet, filename string, src interface{}, scope 
 // list may be nil or contain partial ASTs.
 //
 // If scope is non-nil, it will be used for declarations.
-//
 func ParseDeclList(fset *token.FileSet, filename string, src interface{}, scope *ast.Scope, pathToName ImportPathToName) ([]ast.Decl, error) {
 	data, err := readSource(filename, src)
 	if err != nil {
@@ -140,7 +136,6 @@ func ParseDeclList(fset *token.FileSet, filename string, src interface{}, scope 
 // errors were found, the result is a partial AST (with ast.BadX nodes
 // representing the fragments of erroneous source code). Multiple errors
 // are returned via a scanner.ErrorList which is sorted by file position.
-//
 func ParseFile(fset *token.FileSet, filename string, src interface{}, mode uint, pkgScope *ast.Scope, pathToName ImportPathToName) (*ast.File, error) {
 	data, err := readSource(filename, src)
 	if err != nil {
@@ -188,7 +183,6 @@ func parseFileInPkg(fset *token.FileSet, pkgs map[string]*ast.Package, filename 
 // Files with parse errors are ignored. In this case the map of packages may
 // be incomplete (missing packages and/or incomplete packages) and the first
 // error encountered is returned.
-//
 func ParseFiles(fset *token.FileSet, filenames []string, mode uint, pathToName ImportPathToName) (pkgs map[string]*ast.Package, first error) {
 	pkgs = make(map[string]*ast.Package)
 	for _, filename := range filenames {
@@ -208,7 +202,6 @@ func ParseFiles(fset *token.FileSet, filenames []string, mode uint, pathToName I
 // If the directory couldn't be read, a nil map and the respective error are
 // returned. If a parse error occurred, a non-nil but incomplete map and the
 // error are returned.
-//
 func ParseDir(fset *token.FileSet, path string, filter func(os.FileInfo) bool, mode uint, pathToName ImportPathToName) (map[string]*ast.Package, error) {
 	fd, err := os.Open(path)
 	if err != nil {
