@@ -29,7 +29,7 @@ func godefPackages(cfg *packages.Config, filename string, src []byte, searchpos 
 		return nil, nil, err
 	}
 	if len(lpkgs) < 1 {
-		return nil, nil, fmt.Errorf("There must be at least one package that contains the file")
+		return nil, nil, fmt.Errorf("there must be at least one package that contains the file")
 	}
 	// get the node
 	var m match
@@ -39,7 +39,7 @@ func godefPackages(cfg *packages.Config, filename string, src []byte, searchpos 
 		return nil, nil, fmt.Errorf("no file found at search pos %d", searchpos)
 	}
 	if m.ident == nil {
-		return nil, nil, fmt.Errorf("Offset %d was not a valid identifier", searchpos)
+		return nil, nil, fmt.Errorf("offset %d was not a valid identifier", searchpos)
 	}
 	obj := lpkgs[0].TypesInfo.ObjectOf(m.ident)
 	if obj == nil && !m.ident.Pos().IsValid() {

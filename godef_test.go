@@ -1,14 +1,11 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"go/build"
 	"go/token"
-	"io/ioutil"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strings"
 	"testing"
 
@@ -69,44 +66,6 @@ func runGoDefTest(t testing.TB, exporter packagestest.Exporter, runCount int, mo
 				t.Errorf("Got %v expected %v", posStr(check), posStr(target))
 			}
 		},
-		"godefPrint": func(src token.Position, mode string, re *regexp.Regexp) {
-			count++
-			obj, err := invokeGodef(exported.Config, src, runCount)
-			if err != nil {
-				t.Error(err)
-				return
-			}
-			buf := &bytes.Buffer{}
-			switch mode {
-			case "json":
-				*jsonFlag = true
-				*tflag = false
-				*aflag = false
-				*Aflag = false
-			case "all":
-				*jsonFlag = false
-				*tflag = true
-				*aflag = true
-				*Aflag = true
-			case "public":
-				*jsonFlag = false
-				*tflag = true
-				*aflag = true
-				*Aflag = false
-			case "type":
-				*jsonFlag = false
-				*tflag = true
-				*aflag = false
-				*Aflag = false
-			default:
-				t.Fatalf("Invalid print mode %v", mode)
-			}
-
-			print(buf, obj)
-			if !re.Match(buf.Bytes()) {
-				t.Errorf("in mode %q got %v want %v", mode, buf, re)
-			}
-		},
 	}); err != nil {
 		t.Fatal(err)
 	}
@@ -118,7 +77,7 @@ func runGoDefTest(t testing.TB, exporter packagestest.Exporter, runCount int, mo
 var cwd, _ = os.Getwd()
 
 func invokeGodef(cfg *packages.Config, src token.Position, runCount int) (*Object, error) {
-	input, err := ioutil.ReadFile(src.Filename)
+	input, err := os.ReadFile(src.Filename)
 	if err != nil {
 		return nil, fmt.Errorf("Failed %v: %v", src, err)
 	}
@@ -131,14 +90,14 @@ func invokeGodef(cfg *packages.Config, src token.Position, runCount int) (*Objec
 	// define-in-buffer functionality.
 	savedFile := src.Filename + ".saved"
 	if _, err := os.Stat(savedFile); err == nil {
-		savedData, err := ioutil.ReadFile(savedFile)
+		savedData, err := os.ReadFile(savedFile)
 		if err != nil {
 			return nil, fmt.Errorf("cannot read saved file: %v", err)
 		}
-		if err := ioutil.WriteFile(src.Filename, savedData, 0666); err != nil {
+		if err := os.WriteFile(src.Filename, savedData, 0666); err != nil {
 			return nil, fmt.Errorf("cannot write saved file: %v", err)
 		}
-		defer ioutil.WriteFile(src.Filename, input, 0666)
+		defer os.WriteFile(src.Filename, input, 0666)
 	}
 	// repeat the actual godef part n times, for benchmark support
 	var obj *Object
