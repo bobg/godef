@@ -99,7 +99,7 @@ func acmeCurrentWin() (*acme.Win, error) {
 
 func runeOffset2ByteOffset(b []byte, off int) int {
 	r := 0
-	for i, _ := range string(b) {
+	for i := range string(b) {
 		if r == off {
 			return i
 		}
@@ -132,9 +132,7 @@ func nsFromDisplay() (string, error) {
 	}
 	// canonicalize: xxx:0.0 => xxx:0
 	if i := strings.LastIndex(disp, ":"); i >= 0 {
-		if strings.HasSuffix(disp, ".0") {
-			disp = disp[:len(disp)-2]
-		}
+		disp = strings.TrimSuffix(disp, ".0")
 	}
 
 	// turn /tmp/launch/:0 into _tmp_launch_:0 (OS X 10.5)
