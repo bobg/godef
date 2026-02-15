@@ -28,7 +28,7 @@ type ImportPathToName func(path string, fromDir string) (string, error)
 // If src != nil, readSource converts src to a []byte if possible;
 // otherwise it returns an error. If src == nil, readSource returns
 // the result of reading the file specified by filename.
-func readSource(filename string, src interface{}) ([]byte, error) {
+func readSource(filename string, src any) ([]byte, error) {
 	if src != nil {
 		switch s := src.(type) {
 		case string:
@@ -66,7 +66,7 @@ func (p *parser) parseEOF() error {
 // may be nil or contain a partial AST.
 //
 // if scope is non-nil, it will be used as the scope for the expression.
-func ParseExpr(fset *token.FileSet, filename string, src interface{}, scope *ast.Scope, pathToName ImportPathToName) (ast.Expr, error) {
+func ParseExpr(fset *token.FileSet, filename string, src any, scope *ast.Scope, pathToName ImportPathToName) (ast.Expr, error) {
 	data, err := readSource(filename, src)
 	if err != nil {
 		return nil, err
@@ -87,7 +87,7 @@ func ParseExpr(fset *token.FileSet, filename string, src interface{}, scope *ast
 // list may be nil or contain partial ASTs.
 //
 // if scope is non-nil, it will be used as the scope for the statements.
-func ParseStmtList(fset *token.FileSet, filename string, src interface{}, scope *ast.Scope, pathToName ImportPathToName) ([]ast.Stmt, error) {
+func ParseStmtList(fset *token.FileSet, filename string, src any, scope *ast.Scope, pathToName ImportPathToName) ([]ast.Stmt, error) {
 	data, err := readSource(filename, src)
 	if err != nil {
 		return nil, err
@@ -104,7 +104,7 @@ func ParseStmtList(fset *token.FileSet, filename string, src interface{}, scope 
 // list may be nil or contain partial ASTs.
 //
 // If scope is non-nil, it will be used for declarations.
-func ParseDeclList(fset *token.FileSet, filename string, src interface{}, scope *ast.Scope, pathToName ImportPathToName) ([]ast.Decl, error) {
+func ParseDeclList(fset *token.FileSet, filename string, src any, scope *ast.Scope, pathToName ImportPathToName) ([]ast.Decl, error) {
 	data, err := readSource(filename, src)
 	if err != nil {
 		return nil, err
@@ -136,7 +136,7 @@ func ParseDeclList(fset *token.FileSet, filename string, src interface{}, scope 
 // errors were found, the result is a partial AST (with ast.BadX nodes
 // representing the fragments of erroneous source code). Multiple errors
 // are returned via a scanner.ErrorList which is sorted by file position.
-func ParseFile(fset *token.FileSet, filename string, src interface{}, mode uint, pkgScope *ast.Scope, pathToName ImportPathToName) (*ast.File, error) {
+func ParseFile(fset *token.FileSet, filename string, src any, mode uint, pkgScope *ast.Scope, pathToName ImportPathToName) (*ast.File, error) {
 	data, err := readSource(filename, src)
 	if err != nil {
 		return nil, err
@@ -216,7 +216,7 @@ func ParseDir(fset *token.FileSet, path string, filter func(os.FileInfo) bool, m
 
 	filenames := make([]string, len(list))
 	n := 0
-	for i := 0; i < len(list); i++ {
+	for i := range list {
 		d := list[i]
 		if filter == nil || filter(d) {
 			filenames[n] = filepath.Join(path, d.Name())

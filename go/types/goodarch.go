@@ -47,10 +47,10 @@ var goodArch = make(map[string]bool)
 func init() {
 	goodOS = make(map[string]bool)
 	goodArch = make(map[string]bool)
-	for _, v := range strings.Fields(goosList) {
+	for v := range strings.FieldsSeq(goosList) {
 		goodOS[v] = v == runtime.GOOS
 	}
-	for _, v := range strings.Fields(goarchList) {
+	for v := range strings.FieldsSeq(goarchList) {
 		goodArch[v] = v == runtime.GOARCH
 	}
 }

@@ -54,7 +54,7 @@ func (b *triBool) Set(s string) error {
 	return err
 }
 
-func (b *triBool) Get() interface{} {
+func (b *triBool) Get() any {
 	return *b
 }
 
@@ -259,7 +259,7 @@ func cleanFilename(path string) string {
 }
 
 type pretty struct {
-	n interface{}
+	n any
 }
 
 func (p pretty) Format(f fmt.State, c rune) {

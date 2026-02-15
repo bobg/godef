@@ -76,10 +76,10 @@ func (s *Scope) String() string {
 //	Con     != nil       constant value
 type Object struct {
 	Kind ObjKind
-	Name string      // declared name
-	Decl interface{} // corresponding Field, XxxSpec, FuncDecl, or LabeledStmt; or nil
-	Data interface{} // object-specific data; or nil
-	Type interface{} // place holder for type information; may be nil
+	Name string // declared name
+	Decl any    // corresponding Field, XxxSpec, FuncDecl, or LabeledStmt; or nil
+	Data any    // object-specific data; or nil
+	Type any    // place holder for type information; may be nil
 }
 
 // NewObj creates a new object of a given kind and name.

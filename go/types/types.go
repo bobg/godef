@@ -683,7 +683,7 @@ func (typ Type) Underlying(all bool) Type {
 	return typ
 }
 
-func noParens(typ interface{}) interface{} {
+func noParens(typ any) any {
 	for {
 		if n, ok := typ.(*ast.ParenExpr); ok {
 			typ = n.X
@@ -704,7 +704,7 @@ func (ctxt *exprTypeContext) certify(typ ast.Node, kind ast.ObjKind, pkg string)
 }
 
 // If n represents a single identifier, exprName returns its object.
-func exprName(typ interface{}) *ast.Object {
+func exprName(typ any) *ast.Object {
 	switch t := noParens(typ).(type) {
 	case *ast.Ident:
 		return t.Obj
@@ -913,14 +913,14 @@ func methodExpr(fd *ast.FuncDecl) *ast.FuncType {
 
 // XXX  the following stuff is for debugging - remove later.
 
-func debugp(f string, a ...interface{}) {
+func debugp(f string, a ...any) {
 	if Debug {
 		log.Printf(f, a...)
 	}
 }
 
 type pretty struct {
-	n interface{}
+	n any
 }
 
 func (p pretty) String() string {

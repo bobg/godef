@@ -13,7 +13,7 @@ import (
 
 var fset = token.NewFileSet()
 
-var illegalInputs = []interface{}{
+var illegalInputs = []any{
 	nil,
 	3.14,
 	[]byte(nil),
@@ -32,7 +32,7 @@ func TestParseIllegalInputs(t *testing.T) {
 	}
 }
 
-var validPrograms = []interface{}{
+var validPrograms = []any{
 	"package p\n",
 	`package p;`,
 	`package p; import "fmt"; func f() { fmt.Println("Hello, World!") };`,

@@ -100,7 +100,7 @@ func (p *printer) init(output io.Writer, cfg *Config, fset *token.FileSet, nodeS
 	p.nodeSizes = nodeSizes
 }
 
-func (p *printer) internalError(msg ...interface{}) {
+func (p *printer) internalError(msg ...any) {
 	if debug {
 		fmt.Print(p.pos.String() + ": ")
 		fmt.Println(msg...)
@@ -231,7 +231,7 @@ func (p *printer) writeItem(pos token.Position, data string) {
 	if debug {
 		// do not update p.pos - use write0
 		_, filename := filepath.Split(pos.Filename)
-		p.write0([]byte(fmt.Sprintf("[%s:%d:%d]", filename, pos.Line, pos.Column)))
+		p.write0(fmt.Appendf(nil, "[%s:%d:%d]", filename, pos.Line, pos.Column))
 	}
 	p.write([]byte(data))
 	p.last = p.pos
@@ -492,8 +492,8 @@ func stripCommonPrefix(lines [][]byte) {
 	// lines.
 	last := lines[len(lines)-1]
 	closing := []byte("*/")
-	i := bytes.Index(last, closing)
-	if isBlank(last[0:i]) {
+	before, _, _ := bytes.Cut(last, closing)
+	if isBlank(before) {
 		// last line only contains closing */
 		var sep []byte
 		if lineOfStars {
@@ -696,7 +696,7 @@ func mayCombine(prev token.Token, next byte) (b bool) {
 // taking into account the amount and structure of any pending white-
 // space for best comment placement. Then, any leftover whitespace is
 // printed, followed by the actual token.
-func (p *printer) print(args ...interface{}) {
+func (p *printer) print(args ...any) {
 	for _, f := range args {
 		next := p.pos // estimated position of next item
 		var data string
@@ -912,7 +912,7 @@ type Config struct {
 }
 
 // fprint implements Fprint and takes a nodesSizes map for setting up the printer state.
-func (cfg *Config) fprint(output io.Writer, fset *token.FileSet, node interface{}, nodeSizes map[ast.Node]int) (int, error) {
+func (cfg *Config) fprint(output io.Writer, fset *token.FileSet, node any, nodeSizes map[ast.Node]int) (int, error) {
 	// redirect output through a trimmer to eliminate trailing whitespace
 	// (Input to a tabwriter must be untrimmed since trailing tabs provide
 	// formatting information. The tabwriter could provide trimming
@@ -987,13 +987,13 @@ func (cfg *Config) fprint(output io.Writer, fset *token.FileSet, node interface{
 // Position information is interpreted relative to the file set fset.
 // The node type must be *ast.File, or assignment-compatible to ast.Expr,
 // ast.Decl, ast.Spec, or ast.Stmt.
-func (cfg *Config) Fprint(output io.Writer, fset *token.FileSet, node interface{}) (int, error) {
+func (cfg *Config) Fprint(output io.Writer, fset *token.FileSet, node any) (int, error) {
 	return cfg.fprint(output, fset, node, make(map[ast.Node]int))
 }
 
 // Fprint "pretty-prints" an AST node to output.
 // It calls Config.Fprint with default settings.
-func Fprint(output io.Writer, fset *token.FileSet, node interface{}) error {
+func Fprint(output io.Writer, fset *token.FileSet, node any) error {
 	_, err := (&Config{Tabwidth: 8}).Fprint(output, fset, node) // don't care about number of bytes written
 	return err
 }

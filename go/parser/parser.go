@@ -294,7 +294,7 @@ func (p *parser) resolve(ident *ast.Ident) {
 // ----------------------------------------------------------------------------
 // Parsing support
 
-func (p *parser) printTrace(a ...interface{}) {
+func (p *parser) printTrace(a ...any) {
 	const dots = ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . " +
 		". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . "
 	const n = uint(len(dots))

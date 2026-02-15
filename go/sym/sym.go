@@ -43,7 +43,7 @@ type Context struct {
 
 	// Logf is used to print warning messages.
 	// If it is nil, no warning messages will be printed.
-	Logf func(pos token.Pos, f string, a ...interface{})
+	Logf func(pos token.Pos, f string, a ...any)
 }
 
 func NewContext() *Context {
@@ -110,7 +110,7 @@ func (ctxt *Context) importerFunc() types.Importer {
 	}
 }
 
-func (ctxt *Context) logf(pos token.Pos, f string, a ...interface{}) {
+func (ctxt *Context) logf(pos token.Pos, f string, a ...any) {
 	if ctxt.Logf == nil {
 		return
 	}
