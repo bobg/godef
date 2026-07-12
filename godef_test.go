@@ -16,7 +16,7 @@ import (
 func TestGoDef(t *testing.T) { packagestest.TestAll(t, testGoDef) }
 func testGoDef(t *testing.T, exporter packagestest.Exporter) {
 	runGoDefTest(t, exporter, 1, []packagestest.Module{{
-		Name:  "github.com/rogpeppe/godef",
+		Name:  "github.com/bobg/godef",
 		Files: packagestest.MustCopyFileTree("testdata"),
 	}})
 }
@@ -24,7 +24,7 @@ func testGoDef(t *testing.T, exporter packagestest.Exporter) {
 func BenchmarkGoDef(b *testing.B) { packagestest.BenchmarkAll(b, benchGoDef) }
 func benchGoDef(b *testing.B, exporter packagestest.Exporter) {
 	runGoDefTest(b, exporter, b.N, []packagestest.Module{{
-		Name:  "github.com/rogpeppe/godef",
+		Name:  "github.com/bobg/godef",
 		Files: packagestest.MustCopyFileTree("testdata"),
 	}})
 }

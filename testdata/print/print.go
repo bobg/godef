@@ -1,8 +1,8 @@
 package print
 
 import (
-	"github.com/rogpeppe/godef/a" //@mark(PrintImportDir, "rogpeppe")
-	"github.com/rogpeppe/godef/b"
+	"github.com/bobg/godef/a" //@mark(PrintImportDir, "bobg")
+	"github.com/bobg/godef/b"
 )
 
 type localStruct struct {
