@@ -165,8 +165,8 @@ type Object struct {
 	Pkg      string
 	Position Position
 	Members  []*Object
-	Type     interface{}
-	Value    interface{}
+	Type     any
+	Value    any
 }
 
 func print(out io.Writer, obj *Object) error {

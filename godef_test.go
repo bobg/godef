@@ -49,7 +49,7 @@ func runGoDefTest(t testing.TB, exporter packagestest.Exporter, runCount int, mo
 	}
 
 	count := 0
-	if err := exported.Expect(map[string]interface{}{
+	if err := exported.Expect(map[string]any{
 		"godef": func(src, target token.Position) {
 			count++
 			obj, err := invokeGodef(exported.Config, src, runCount)
@@ -101,7 +101,7 @@ func invokeGodef(cfg *packages.Config, src token.Position, runCount int) (*Objec
 	}
 	// repeat the actual godef part n times, for benchmark support
 	var obj *Object
-	for i := 0; i < runCount; i++ {
+	for range runCount {
 		obj, err = adaptGodef(cfg, src.Filename, input, src.Offset)
 		if err != nil {
 			return nil, fmt.Errorf("Failed %v: %v", src, err)

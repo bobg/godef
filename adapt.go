@@ -47,7 +47,7 @@ func (b *triBool) Set(s string) error {
 	return err
 }
 
-func (b *triBool) Get() interface{} {
+func (b *triBool) Get() any {
 	return *b
 }
 
