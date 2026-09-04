@@ -8,6 +8,7 @@ import (
 	"bufio"
 	"bytes"
 	"flag"
+	"fmt"
 	"os"
 	"runtime"
 	"strconv"
@@ -156,4 +157,19 @@ func cleanFilename(path string) string {
 	}
 	//TODO: we need a better way to get the GOROOT that uses the packages api
 	return runtime.GOROOT() + path[len(prefix):]
+}
+
+type pretty struct {
+	n any
+}
+
+func (p pretty) Format(f fmt.State, c rune) {
+	switch n := p.n.(type) {
+	case gotypes.Type:
+		buf := &bytes.Buffer{}
+		gotypes.WriteType(buf, n, func(p *gotypes.Package) string { return "" })
+		buf.WriteTo(f)
+	default:
+		fmt.Fprint(f, n)
+	}
 }
