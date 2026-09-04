@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"go/ast"
 	"go/parser"
@@ -18,8 +19,13 @@ func godefPackages(cfg *packages.Config, filename string, src []byte, searchpos 
 	parser, result := parseFile(filename, searchpos)
 	// Load, parse, and type-check the packages named on the command line.
 	if src != nil {
-		cfg.Overlay = map[string][]byte{
-			filename: src,
+		// In some circumstances (for example when looking at a file in $GOMODCACHE)
+		// the Go tool prevents overlays, so only overlay when we actually need to.
+		data, err := os.ReadFile(filename)
+		if err != nil || !bytes.Equal(data, src) {
+			cfg.Overlay = map[string][]byte{
+				filename: src,
+			}
 		}
 	}
 	cfg.Mode = packages.LoadSyntax
